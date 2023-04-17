@@ -45,7 +45,7 @@ router.register(r'construction-view-set', ConstructionViewSet)
 router.register(r'locality-view-set', LocalityViewSet)
 router.register(r'construction-stage-view-set', ConstructionStageViewSet)
 
-urlpatterns = [
+urlpatterns = router.urls + [
     path('admin/', admin.site.urls),
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
