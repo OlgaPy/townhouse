@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
+from configparser import ConfigParser
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -74,13 +75,20 @@ WSGI_APPLICATION = 'townhouse.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
+config = ConfigParser()
+config.read(os.path.join(BASE_DIR, 'config/environment.ini'))
+DB_SETTINGS = dict(config['db:default'])
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DB_SETTINGS['name'],
+        'USER': DB_SETTINGS['user'],
+        'HOST': DB_SETTINGS['host'],
+        'PASSWORD': DB_SETTINGS['pass'],
+        'PORT': DB_SETTINGS['port'],
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
