@@ -1,0 +1,17 @@
+asgiref==3.5.2
+Django==3.2.16
+django-ninja==0.19.1
+django-npm==1.0.0
+django-oscar==3.2
+djangorestframework==3.11.1
+django-rest-swagger==2.2.0
+gunicorn==20.1.0
+psycopg2==2.9.3
+pydantic==1.9.2
+sqlparse==0.4.2
+typing_extensions==4.3.0
+openapi==1.1.0
+drf-yasg==1.20.0
+drf_generators==0.5.0
+
+python-decouple==3.1
