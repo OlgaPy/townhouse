@@ -25,6 +25,8 @@ class Card(models.Model):
     source = models.ForeignKey(Source, on_delete=models.CASCADE)
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=False)
+    username = models.CharField(max_length=1024, blank=False, null=True)
+
 
     class Meta:
         db_table = 'card'

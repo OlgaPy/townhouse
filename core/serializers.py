@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.apps import apps
 from django.db import connections
 from django.shortcuts import get_object_or_404
@@ -20,9 +22,14 @@ class StatusSerializer(ModelSerializer):
 
 
 class CardSerializer(ModelSerializer):
+    username = serializers.DateField(required=True)
+
     class Meta:
         model = Card
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ('name', 'phone', 'email', 'username')
+
+
 
 
 class ClientSerializer(ModelSerializer):
@@ -60,6 +67,23 @@ class LocalitySerializer(ModelSerializer):
         model = Locality
         fields = '__all__'
 
+
+
+
+class MonitorForDateSerializer(serializers.Serializer):
+    mode_name = serializers.ChoiceField(choices=('Client-CP', 'Nostro-CP'),
+                                        required=True)
+    report_date = serializers.CharField(required=True)
+    username = serializers.CharField(required=True)
+
+    @staticmethod
+    def validate_report_date(date) -> str:
+        try:
+            datetime.strptime(date, "%Y-%m-%d")
+        except Exception as e:
+            raise serializers.ValidationError(
+                "Date has wrong format. Use format YYYY-MM-DD")
+        return date
 
 class ConstructionStageSerializer(ModelSerializer):
     class Meta:
