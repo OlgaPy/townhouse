@@ -14,12 +14,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
-from rest_framework.routers import SimpleRouter
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
 from django.conf.urls import url
+from django.contrib import admin
+from django.urls import path, include
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework.routers import SimpleRouter
+
+from core.urls import urlpatterns as table_endpoints
 from core.views import *
 
 router = SimpleRouter()
@@ -33,20 +35,10 @@ schema_view = get_schema_view(
     public=True,
 
 )
-
-router.register(r'source-view-set', SourceViewSet)
-router.register(r'status-view-set', StatusViewSet)
-router.register(r'card-view-set', CardViewSet)
-router.register(r'client-view-set', ClientViewSet)
-router.register(r'manager-view-set', ManagerViewSet)
-router.register(r'document-view-set', DocumentViewSet)
-router.register(r'town-house-view-set', TownHouseViewSet)
-router.register(r'construction-view-set', ConstructionViewSet)
-router.register(r'locality-view-set', LocalityViewSet)
-router.register(r'construction-stage-view-set', ConstructionStageViewSet)
-
 urlpatterns = router.urls + [
     path('admin/', admin.site.urls),
+    path('table/', include(table_endpoints)),
+
     url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
