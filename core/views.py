@@ -30,7 +30,7 @@ class BaseViewSet(ModelViewSet):
         })
 
 
-class SourceViewSet(ModelViewSet):
+class SourceViewSet(BaseViewSet):
     queryset = Source.objects.order_by('pk')
     serializer_class = SourceSerializer
 
@@ -40,41 +40,41 @@ class StatusViewSet(BaseViewSet):
     serializer_class = StatusSerializer
 
 
-class CardViewSet(ModelViewSet):
+class CardViewSet(BaseViewSet):
     queryset = Card.objects.order_by('pk')
     serializer_class = CardSerializer
 
 
-class ClientViewSet(ModelViewSet):
+class ClientViewSet(BaseViewSet):
     queryset = Client.objects.order_by('pk')
     serializer_class = ClientSerializer
 
 
-class ManagerViewSet(ModelViewSet):
+class ManagerViewSet(BaseViewSet):
     queryset = Manager.objects.order_by('pk')
     serializer_class = ManagerSerializer
 
 
-class DocumentViewSet(ModelViewSet):
+class DocumentViewSet(BaseViewSet):
     queryset = Document.objects.order_by('pk')
     serializer_class = DocumentSerializer
 
 
-class TownHouseViewSet(ModelViewSet):
+class TownHouseViewSet(BaseViewSet):
     queryset = TownHouse.objects.order_by('pk')
     serializer_class = TownHouseSerializer
 
 
-class ConstructionViewSet(ModelViewSet):
+class ConstructionViewSet(BaseViewSet):
     queryset = Construction.objects.order_by('pk')
     serializer_class = ConstructionSerializer
 
 
-class LocalityViewSet(ModelViewSet):
+class LocalityViewSet(BaseViewSet):
     queryset = Locality.objects.order_by('pk')
     serializer_class = LocalitySerializer
 
 
-class ConstructionStageViewSet(ModelViewSet):
+class ConstructionStageViewSet(BaseViewSet):
     queryset = ConstructionStage.objects.order_by('pk')
     serializer_class = ConstructionStageSerializer
