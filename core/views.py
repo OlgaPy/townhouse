@@ -1,15 +1,17 @@
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.request import Request
 from rest_framework.viewsets import ModelViewSet
 
 from .serializers import *
+from .filters import *
 from .utils.util import DefaultViewSetPagination
 
 
 class BaseViewSet(ModelViewSet):
     pagination_class = DefaultViewSetPagination
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = (DjangoFilterBackend, )
     http_method_names = ['get', 'post']
 
     def list(self, request: Request, *args, **kwargs) -> JsonResponse:
@@ -38,6 +40,7 @@ class SourceViewSet(BaseViewSet):
 class StatusViewSet(BaseViewSet):
     queryset = Status.objects.order_by('pk')
     serializer_class = StatusSerializer
+    filterset_class = StatusFilter
 
 
 class CardViewSet(BaseViewSet):
