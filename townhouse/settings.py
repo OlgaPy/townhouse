@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'townhouse',
     'core.apps.CoreConfig',
     'drf_generators',
+    'django_filters',
+
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'townhouse.middleware.SQLSecurityMiddleware'
 ]
 
 ROOT_URLCONF = 'townhouse.urls'
