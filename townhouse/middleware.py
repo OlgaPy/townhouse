@@ -1,13 +1,11 @@
 import re
 
 from django.http import JsonResponse
-
+from core.urls import *
 
 class SQLSecurityMiddleware:
     """validate for sql-injection characters"""
-    pure_sql_view = [
-        '/for-date/'
-    ]
+    pure_sql_view = [f'/table/{u.name}/' for u in urlpatterns]
 
     def __init__(self, get_response):
         self._get_response = get_response

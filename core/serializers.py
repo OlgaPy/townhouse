@@ -12,7 +12,6 @@ class SourceSerializer(ModelSerializer):
         model = Source
         fields = '__all__'
 
-
 class StatusSerializer(ModelSerializer):
     class Meta:
         model = Status
