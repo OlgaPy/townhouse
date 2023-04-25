@@ -38,7 +38,7 @@ class ManagerFilter(django_filters.FilterSet):
 class DocumentFilter(django_filters.FilterSet):
     class Meta:
         model = Document
-        fields = '__all__'
+        fields = ('name', 'client', 'building', 'manager')
 
 
 class TownHouseFilter(django_filters.FilterSet):

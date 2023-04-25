@@ -1,9 +1,10 @@
 from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
-
+from rest_framework import status
 from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.parsers import MultiPartParser, FormParser
 from .serializers import *
 from .filters import *
 from .utils.util import DefaultViewSetPagination
@@ -12,7 +13,6 @@ from .utils.util import DefaultViewSetPagination
 class BaseViewSet(ModelViewSet):
     pagination_class = DefaultViewSetPagination
     filter_backends = (DjangoFilterBackend, )
-    http_method_names = ['get', 'post']
 
     def list(self, request: Request, *args, **kwargs) -> JsonResponse:
         """Overrated method with default pagination, limit, order"""
@@ -36,18 +36,21 @@ class SourceViewSet(BaseViewSet):
     queryset = Source.objects.order_by('pk')
     serializer_class = SourceSerializer
     filterset_class = SourceFilter
+    http_method_names = ['get', 'post']
 
 
 class StatusViewSet(BaseViewSet):
     queryset = Status.objects.order_by('pk')
     serializer_class = StatusSerializer
     filterset_class = StatusFilter
+    http_method_names = ['get', 'post']
 
 
 class CardViewSet(BaseViewSet):
     queryset = Card.objects.order_by('pk')
     serializer_class = CardSerializer
     filterset_class = CardFilter
+
 
 class ClientViewSet(BaseViewSet):
     queryset = Client.objects.order_by('pk')
@@ -61,10 +64,18 @@ class ManagerViewSet(BaseViewSet):
     filterset_class = ManagerFilter
 
 
-class DocumentViewSet(BaseViewSet):
+class DocumentViewSet(ModelViewSet):
     queryset = Document.objects.order_by('pk')
     serializer_class = DocumentSerializer
     filterset_class = DocumentFilter
+    parser_classes = [MultiPartParser, FormParser]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class TownHouseViewSet(BaseViewSet):
