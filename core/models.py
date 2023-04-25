@@ -1,5 +1,7 @@
 from django.db import models
 
+from core.utils.util import get_file_path
+
 
 class Source(models.Model):
     """whatsup, telegram, viber, vk, sarafan, marketing, web-site..."""
@@ -16,6 +18,7 @@ class Status(models.Model):
 
     class Meta:
         db_table = 'status'
+
 
 class Card(models.Model):
     """Card of client"""
@@ -64,7 +67,6 @@ class Manager(models.Model):
         'Manager', on_delete=models.DO_NOTHING, null=True, blank=True)
     level = models.CharField(max_length=1024, blank=True, null=True)
 
-
     class Meta:
         db_table = 'manager'
 
@@ -72,8 +74,7 @@ class Manager(models.Model):
 class Document(models.Model):
     """All documents that need for deal"""
     name = models.CharField(max_length=1024, blank=True, null=True)
-    filepath = models.CharField(max_length=1024, blank=True, null=True)
-
+    file = models.FileField(upload_to=get_file_path)
     client = models.ForeignKey(
         'Client', on_delete=models.DO_NOTHING, null=True)
     building = models.ForeignKey(
@@ -134,5 +135,3 @@ class ConstructionStage(models.Model):
 
     class Meta:
         db_table = 'construction_stage'
-
-
