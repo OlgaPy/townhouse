@@ -5,7 +5,7 @@ from core.urls import *
 
 class SQLSecurityMiddleware:
     """validate for sql-injection characters"""
-    pure_sql_view = [f'/table/{u.name}/' for u in urlpatterns]
+    pure_sql_view = [f'/table/{u.name}/' for u in urlpatterns] + [f'/table/{i[0]}/' for i in router.registry]
 
     def __init__(self, get_response):
         self._get_response = get_response
@@ -13,7 +13,8 @@ class SQLSecurityMiddleware:
     def __call__(self, request):
         if request.path in self.pure_sql_view:
             error = self.validate(dict(request.GET))
-            return JsonResponse({'errors': error}, status=400)
+            if error:
+                return JsonResponse({'errors': error}, status=400)
         response = self._get_response(request)
         return response
 
