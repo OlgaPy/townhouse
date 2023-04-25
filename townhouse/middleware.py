@@ -1,7 +1,9 @@
 import re
-
+from typing import Dict
+import json
 from django.http import JsonResponse
 from core.urls import *
+
 
 class SQLSecurityMiddleware:
     """validate for sql-injection characters"""
@@ -12,13 +14,16 @@ class SQLSecurityMiddleware:
 
     def __call__(self, request):
         if request.path in self.pure_sql_view:
-            error = self.validate(dict(request.GET))
+            params = dict(request.GET) if request.method == 'GET' else {}
+            params.update(dict(json.loads(request.body)) if getattr(request, 'body', '') else {})
+            error = self.validate(params)
             if error:
                 return JsonResponse({'errors': error}, status=400)
         response = self._get_response(request)
         return response
 
-    def validate(self, data):
+    @staticmethod
+    def validate(data: Dict):
         error = []
         for field, value in data.items():
             if isinstance(value, str) and re.search(r"[\"'=();]+", value):
