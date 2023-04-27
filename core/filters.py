@@ -4,13 +4,15 @@ from .models import *
 
 
 class SourceFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(field_name='name', lookup_expr='icontains')
+
     class Meta:
         model = Source
         fields = '__all__'
 
 
 class StatusFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(field_name='name', lookup_expr='iexact')
+    name = django_filters.CharFilter(field_name='name', lookup_expr='icontains')
 
     class Meta:
         model = Status

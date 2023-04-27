@@ -39,13 +39,18 @@ class ManagerSerializer(ModelSerializer):
 
 class DocumentSerializer(ModelSerializer):
     client = serializers.SlugRelatedField(
-        queryset=Client.objects.all(), allow_null=True,
+        queryset=Client.objects.all(),
+        allow_null=True,
         required=False,
-        slug_field='login')
+        slug_field='login',
+        help_text="Client's login")
     manager = serializers.SlugRelatedField(
-        queryset=Manager.objects.all(), allow_null=True,
+        queryset=Manager.objects.all(),
+        allow_null=True,
         required=False,
-        slug_field='login')
+        slug_field='login',
+        help_text="Manager's login")
+    name = serializers.CharField(required=True, help_text='Name of file')
 
     class Meta:
         model = Document
