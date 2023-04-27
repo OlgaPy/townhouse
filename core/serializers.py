@@ -8,15 +8,25 @@ from .models import *
 
 
 class SourceSerializer(ModelSerializer):
+    name = serializers.ChoiceField(choices=['a', 'b'])
     class Meta:
         model = Source
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ('name',)
+        extra_kwargs = {'name': {'required': False, 'help_text': '1111'}, }
+
+    def validate(self, attrs):
+        print(11)
+        res = super().validate(attrs)
+        return res
 
 
 class StatusSerializer(ModelSerializer):
+    name = serializers.CharField(required=False, help_text='part of name, case insensitive')
+
     class Meta:
         model = Status
-        fields = '__all__'
+        fields = ('name',)
 
 
 class CardSerializer(ModelSerializer):

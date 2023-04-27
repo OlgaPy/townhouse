@@ -1,5 +1,7 @@
 from django.http import JsonResponse
+from django.utils.decorators import method_decorator
 from django_filters.rest_framework import DjangoFilterBackend
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -23,10 +25,12 @@ class BaseFilesViewSet(ModelViewSet):
 
 class BaseViewSet(ModelViewSet):
     pagination_class = DefaultViewSetPagination
-    filter_backends = (DjangoFilterBackend, )
+    filter_backends = (DjangoFilterBackend,)
 
     def list(self, request: Request, *args, **kwargs) -> JsonResponse:
         """Overrated method with default pagination, limit, order"""
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         query_params = self.request.query_params
         page = int(query_params.get('page')) if query_params.get('page') else 0
         limit = int(query_params.get('limit')) if query_params.get('limit') else 50
@@ -46,8 +50,28 @@ class BaseViewSet(ModelViewSet):
 class SourceViewSet(BaseViewSet):
     queryset = Source.objects.order_by('pk')
     serializer_class = SourceSerializer
-    filterset_class = SourceFilter
+    # filterset_class = SourceFilter
     http_method_names = ['get', 'post']
+
+    # @swagger_auto_schema(request_body=SourceSerializer,
+    #                      responses={
+    #                          "200": SourceSerializer(),
+    #                          "400": "Bad request params",
+    #                          "500": "Server error",
+    #                      }, )
+    @method_decorator(name='list', decorator=swagger_auto_schema(
+        # request_body=SourceSerializer,
+        query_serializer=SourceSerializer,
+        responses={
+            "200": SourceSerializer(),
+            "400": "Bad request params",
+            "500": "Server error",
+        },
+
+        operation_description="description from swagger_auto_schema via method_decorator"
+    ))
+    def list(self, request: Request, *args, **kwargs) -> JsonResponse:
+        super(SourceViewSet, self).list(request, *args, **kwargs)
 
 
 class StatusViewSet(BaseViewSet):
