@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 from core.utils.util import get_file_path
@@ -35,6 +37,7 @@ class Card(models.Model):
 
 class Client(models.Model):
     """Person"""
+    login = models.CharField(max_length=1024, blank=False, null=False, unique=True)
     nickname = models.CharField(max_length=1024, blank=False, null=True)
     link_conversation = models.CharField(max_length=4096, blank=False, null=True)
 
@@ -59,6 +62,7 @@ class Client(models.Model):
 
 
 class Manager(models.Model):
+    login = models.CharField(max_length=1024, blank=False, null=False, unique=True)
     name = models.CharField(max_length=1024, blank=True, null=True)
     surname = models.CharField(max_length=1024, blank=True, null=True)
     middle_name = models.CharField(max_length=1024, blank=True, null=True)
@@ -74,13 +78,14 @@ class Manager(models.Model):
 class Document(models.Model):
     """All documents that need for deal"""
     name = models.CharField(max_length=1024, blank=True, null=True)
-    file = models.FileField(upload_to=get_file_path)
+    file = models.FileField(upload_to=get_file_path, blank=False, null=False)
     client = models.ForeignKey(
         'Client', on_delete=models.DO_NOTHING, null=True)
     building = models.ForeignKey(
         'TownHouse', on_delete=models.DO_NOTHING, null=True)
     manager = models.ForeignKey(
         'Manager', on_delete=models.DO_NOTHING, null=True)
+    date_add = models.DateTimeField(default=datetime.now)
 
     class Meta:
         db_table = 'document'
