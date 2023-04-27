@@ -7,7 +7,7 @@ from core.utils.util import get_file_path
 
 class Source(models.Model):
     """whatsup, telegram, viber, vk, sarafan, marketing, web-site..."""
-    name = models.CharField(max_length=1024, blank=False, null=True)
+    name = models.CharField(max_length=1024, blank=False, null=False, unique=True)
     is_active = models.BooleanField(default=False)
 
     class Meta:
@@ -16,7 +16,7 @@ class Source(models.Model):
 
 class Status(models.Model):
     """Status of processing client"""
-    name = models.CharField(max_length=1024, blank=False, null=True)
+    name = models.CharField(max_length=1024, blank=False, null=False, unique=True)
 
     class Meta:
         db_table = 'status'
@@ -63,8 +63,8 @@ class Client(models.Model):
 
 class Manager(models.Model):
     login = models.CharField(max_length=1024, blank=False, null=False, unique=True)
-    name = models.CharField(max_length=1024, blank=True, null=True)
-    surname = models.CharField(max_length=1024, blank=True, null=True)
+    name = models.CharField(max_length=1024, blank=False, null=False)
+    surname = models.CharField(max_length=1024, blank=False, null=False)
     middle_name = models.CharField(max_length=1024, blank=True, null=True)
 
     substitute = models.ForeignKey(
@@ -116,7 +116,7 @@ class TownHouse(models.Model):
 
 class Construction(models.Model):
     """Type of construction of the building. Ex: Style, Mate, Gross, Family"""
-    name = models.CharField(max_length=1024, blank=False, null=True)
+    name = models.CharField(max_length=1024, blank=False, null=True, unique=True)
     schema_path = models.CharField(max_length=1024, blank=False, null=True)
     floor = models.IntegerField(null=True, blank=False)
     rooms = models.IntegerField(null=True, blank=False)
@@ -128,7 +128,7 @@ class Construction(models.Model):
 
 class Locality(models.Model):
     """Which of the building blocks, district"""
-    name = models.CharField(max_length=1024, blank=False, null=True)
+    name = models.CharField(max_length=1024, blank=False, null=True, unique=True)
 
     class Meta:
         db_table = 'locality'
@@ -136,7 +136,7 @@ class Locality(models.Model):
 
 class ConstructionStage(models.Model):
     """Construction Stage. In the project, foundation laid, walls erected, fully prepared, under warranty..."""
-    name = models.CharField(max_length=1024, blank=False, null=True)
+    name = models.CharField(max_length=1024, blank=False, null=True, unique=True)
 
     class Meta:
         db_table = 'construction_stage'
