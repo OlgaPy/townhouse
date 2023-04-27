@@ -10,6 +10,17 @@ from .filters import *
 from .utils.util import DefaultViewSetPagination
 
 
+class BaseFilesViewSet(ModelViewSet):
+    parser_classes = [MultiPartParser, FormParser]
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
 class BaseViewSet(ModelViewSet):
     pagination_class = DefaultViewSetPagination
     filter_backends = (DjangoFilterBackend, )
@@ -64,18 +75,10 @@ class ManagerViewSet(BaseViewSet):
     filterset_class = ManagerFilter
 
 
-class DocumentViewSet(ModelViewSet):
+class DocumentViewSet(BaseFilesViewSet):
     queryset = Document.objects.order_by('pk')
     serializer_class = DocumentSerializer
     filterset_class = DocumentFilter
-    parser_classes = [MultiPartParser, FormParser]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class TownHouseViewSet(BaseViewSet):
@@ -84,7 +87,7 @@ class TownHouseViewSet(BaseViewSet):
     filterset_class = TownHouseFilter
 
 
-class ConstructionViewSet(BaseViewSet):
+class ConstructionViewSet(BaseFilesViewSet):
     queryset = Construction.objects.order_by('pk')
     serializer_class = ConstructionSerializer
     filterset_class = ConstructionFilter

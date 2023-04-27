@@ -36,6 +36,11 @@ class ManagerFilter(django_filters.FilterSet):
 
 
 class DocumentFilter(django_filters.FilterSet):
+    file = django_filters.CharFilter(method='filter_file')
+
+    def filter_file(self, qs, name, value):
+        return qs.filter(**{'file__icontains': value})
+
     class Meta:
         model = Document
         fields = ('name', 'client', 'building', 'manager')
@@ -48,9 +53,14 @@ class TownHouseFilter(django_filters.FilterSet):
 
 
 class ConstructionFilter(django_filters.FilterSet):
+    schema_file = django_filters.CharFilter(method='filter_sf')
+
+    def filter_sf(self, qs, name, value):
+        return qs.filter(**{'schema_file__icontains': value})
+
     class Meta:
         model = Construction
-        fields = '__all__'
+        fields = ('name', 'floor', 'rooms', 'square_house')
 
 
 class LocalityFilter(django_filters.FilterSet):
