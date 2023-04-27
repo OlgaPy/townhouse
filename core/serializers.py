@@ -38,9 +38,18 @@ class ManagerSerializer(ModelSerializer):
 
 
 class DocumentSerializer(ModelSerializer):
+    client = serializers.SlugRelatedField(
+        queryset=Client.objects.all(), allow_null=True,
+        required=False,
+        slug_field='login')
+    manager = serializers.SlugRelatedField(
+        queryset=Manager.objects.all(), allow_null=True,
+        required=False,
+        slug_field='login')
+
     class Meta:
         model = Document
-        fields = '__all__'
+        exclude = ('date_add',)
 
 
 class TownHouseSerializer(ModelSerializer):
