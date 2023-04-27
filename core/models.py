@@ -2,7 +2,7 @@ from datetime import datetime
 
 from django.db import models
 
-from core.utils.util import get_file_path
+from core.utils.util import get_document_file_path, get_schema_file_path
 
 
 class Source(models.Model):
@@ -78,7 +78,7 @@ class Manager(models.Model):
 class Document(models.Model):
     """All documents that need for deal"""
     name = models.CharField(max_length=1024, blank=True, null=True)
-    file = models.FileField(upload_to=get_file_path, blank=False, null=False)
+    file = models.FileField(upload_to=get_document_file_path, blank=False, null=False)
     client = models.ForeignKey(
         'Client', on_delete=models.DO_NOTHING, null=True)
     building = models.ForeignKey(
@@ -116,8 +116,8 @@ class TownHouse(models.Model):
 
 class Construction(models.Model):
     """Type of construction of the building. Ex: Style, Mate, Gross, Family"""
-    name = models.CharField(max_length=1024, blank=False, null=True, unique=True)
-    schema_path = models.CharField(max_length=1024, blank=False, null=True)
+    name = models.CharField(max_length=1024, blank=False, null=False, unique=True)
+    schema_file = models.FileField(upload_to=get_schema_file_path, blank=True, null=True)
     floor = models.IntegerField(null=True, blank=False)
     rooms = models.IntegerField(null=True, blank=False)
     square_house = models.IntegerField(null=True, blank=True)

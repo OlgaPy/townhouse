@@ -11,7 +11,7 @@ class SQLSecurityMiddleware:
     def __init__(self, get_response):
         self._get_response = get_response
 
-        self.exclude = 'documents'
+        self.exclude = ['documents', 'construction']
         self.pure_sql_view = [f'/table/{u.name}/' for u in urlpatterns
                               if u.name not in self.exclude] + \
                              [f'/table/{i[0]}/' for i in router.registry

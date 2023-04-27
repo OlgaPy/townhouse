@@ -34,6 +34,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='document',
             name='file',
-            field=models.FileField(upload_to=core.utils.util.get_file_path),
+            field=models.FileField(upload_to=core.utils.util.get_document_file_path),
         ),
     ]
